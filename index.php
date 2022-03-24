@@ -98,11 +98,7 @@
     }
 
     protected function encryptTicket($ticket) {
-      $o = bin2hex(mcrypt_ecb(MCRYPT_RIJNDAEL_128,
-        pack("H*",$this->getAESKey()),
-        pack("H*",$ticket),
-        MCRYPT_ENCRYPT));
-
+      $o = bin2hex(openssl_encrypt(hex2bin($ticket), 'aes-128-ecb', hex2bin($this->getAESKey()), OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING));
       return $o;
     }
 
