@@ -3,7 +3,7 @@
    * @name YubiKey Simulator v0.9
    * @author Sam Stelfox
    * @license MIT
-   */ 
+   */
   session_start();
   ob_start();
 
@@ -109,9 +109,9 @@
       foreach ($ticketData as $byte) {
         $buffer[] = chr(hexdec($byte));
       }
-      
+
       $m_crc=0x5af0;
-    
+
       for($bpos=0; $bpos<14; $bpos++) {
         $m_crc ^= ord($buffer[$bpos]);
 
@@ -147,6 +147,10 @@
 
     public function getID() {
       return $this->_tokenid;
+    }
+
+    public function getTokenID() {
+      return $this->hex2modhex($this->_tokenid);
     }
 
     public function setInternalID($iid) {
@@ -324,10 +328,10 @@
       }
   }
 ?>
-<!DOCTYPE html> 
-<html lang="en"> 
-  <head> 
-    <meta charset="utf-8"> 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
     <title>YubiKey Simulator</title>
     <style type="text/css">
       body {
@@ -446,7 +450,7 @@
 <?php
   if (isset($_SESSION['savedtokens'])) {
     foreach ($_SESSION['savedtokens'] as $name=>$tkn) {
-      echo "<tr><td><a href='?action=restoresaved&key=" . urlencode(base64_encode($name)) . "'>{$name}</a></td><td>{$tkn->getID()}</td><td><a href='?action=deletekey&key=" . urlencode(base64_encode($name)) . "'>(X)</a></td></tr>";
+      echo "<tr><td><a href='?action=restoresaved&key=" . urlencode(base64_encode($name)) . "'>{$name}</a></td><td>{$tkn->getTokenID()}</td><td><a href='?action=deletekey&key=" . urlencode(base64_encode($name)) . "'>(X)</a></td></tr>";
     }
   }
 ?>
@@ -493,7 +497,7 @@
         <tbody>
           <tr>
             <td>Token ID:</td>
-            <td>{$_SESSION['token']->getID()}</td>
+            <td>{$_SESSION['token']->getTokenID()}</td>
           </tr>
           <tr>
             <td>AES Key:</td>
